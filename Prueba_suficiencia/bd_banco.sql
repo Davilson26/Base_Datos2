@@ -57,7 +57,7 @@ ENGINE = InnoDB;
 -- Table `bd_banco`.`transaccion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bd_banco`.`transaccion` (
-  `idtransaccion` INT NOT NULL,
+  `idtransaccion` INT NOT NULL AUTO_INCREMENT,
   `monto` DOUBLE NULL,
   `creado_el` TIMESTAMP(6) NULL DEFAULT CURRENT_TIMESTAMP,
   `idcuenta` INT NOT NULL,

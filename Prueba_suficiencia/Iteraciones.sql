@@ -61,43 +61,15 @@ END //
 DELIMITER ;
 -- --------------------------------------------------------------------------------------------------
 UPDATE cuenta SET saldo = 100000 WHERE idcliente = 2;
-CALL RetirarDinero('Diego', 10000);
-CALL RetirarDinero('Diego', -10000);
-select * from cuenta;
-
-select * from cliente;
+CALL RetirarDinero('Diego', 10000);   -- ITERACION 3
+CALL RetirarDinero('Diego', 200000);  -- ITERACION 4
+CALL RetirarDinero('Diego', -10000);  -- ITERACION 5
 
 -- --------------------------------------------------------------------------------------------------
 -- ITERACCION 6
--- Característica: transferir dinero a otra cuenta 
--- Como cliente del banco 
--- quiero trasnferir dinero de mi cuenta a otra cuenta 
--- para pagar mis gastos
--- Escenario ideal: un cliente existente transfiere dinero de su cuenta a la cuenta de otro cliente
--- Dado un cliente existente con nombre "Diego" con $500.000 pesos en su cuenta 
--- debe transferirle $400.000 de su cuenta a la cuenta de "Davilson"
--- Entonces el nuevo saldo es de $100.000 pesos.
-
--- Escenario f1: como cliente del banco quiero intentar transferir mas dinero del que tengo en la cuenta
--- Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta
--- Cuando intenta transferirle $600.000 pesos a la cuenta de "Davilson"
--- Entonces se muestra un mensaje indicando "El monto a transferir debe ser menor o igual al saldo de la cuenta"
-
--- Escenario f2: como cliente del banco quiero intentar transferir un monto negativo a otra cuenta
--- Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta
--- Cuando intenta transferirle $-100000 pesos a la cuenta de "Davilson"
--- Entonces se muestra un mensaje indicando "El monto a transferir debe ser mayor a 0"
-
--- Escenario f3: como cliente del banco quiero intentar transferir a una cuenta que no existe
--- Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta
--- Cuando intenta transferirle $100000 pesos a una cuenta que no está registrada
--- Entonces se muestra un mensaje indicando "La cuenta a transferir no existe"
-
--- Escenario f4: como cliente del banco quiero intentar transferir dinero de mi cuenta a mi cuenta
--- Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta
--- Cuando intenta transferirle $500.000 pesos a su misma cuenta
--- Entonces se muestra un mensaje indicando "No se puede transferir a su misma cuenta"
-
+-- Actualizamos la cuenta para el ejemplo
+UPDATE cuenta SET saldo = 500000 WHERE idcliente = 2;
+--  Funcion para transferir y recibir dinero de otras cuentas
 DROP PROCEDURE IF EXISTS TransferirDinero;
 DELIMITER //
 CREATE PROCEDURE TransferirDinero(
