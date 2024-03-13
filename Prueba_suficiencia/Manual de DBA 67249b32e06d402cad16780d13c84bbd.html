@@ -1,0 +1,916 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Manual de DBA</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="67249b32-e06d-402c-ad16-780d13c84bbd" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/gradients_11.jpg" style="object-position:center 100%"/><div class="page-header-icon page-header-icon-with-cover"><img class="icon" src="https://www.notion.so/icons/database_blue.svg"/></div><h1 class="page-title">Manual de DBA</h1><p class="page-description"></p></header><div class="page-body"><p id="3e5cb6fa-0d6c-4bb3-bdbc-9752247a8476" class="">Este proyecto fue desarrollado utilizando <code>MySQL Workbench</code>, es una herramienta de diseño visual para bases de datos que integra desarrollo de software, administración de bases de datos, diseño de bases de datos, gestión y mantenimiento en una única interfaz de usuario integrada, esto permite   optimizar y agilizar el tiempo de desarrollo.</p><p id="fbcd3842-f9b1-4138-a492-b8ae9c1073e4" class="">Este documento presenta el esquema de una base de datos para un simple sistema bancario, <code><strong>bd_banco</strong></code>. Se han diseñado diversas tablas para capturar la información necesaria. La tabla <code><strong>cliente </strong></code>almacena la información  de los clientes del banco. La tabla <code><strong>cuenta</strong></code><strong> </strong>representa las cuentas bancarias de los clientes. La tabla <code><strong>tipo_transaccion</strong></code><strong> </strong>almacena los diferentes tipos de transacciones que pueden ocurrir en una cuenta. Finalmente, la tabla <code><strong>transaccion</strong></code><strong> </strong>registra todas las transacciones que ocurren en las cuentas.</p><h2 id="fdb183cc-b268-45b6-afca-8a4fb5970af7" class=""> Modelo Entidad Relación (MER)</h2><figure id="8e8a8eaa-dfed-42fa-98ce-0c82a882dfee" class="image"><a href="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled.png"><img style="width:779px" src="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled.png"/></a><figcaption>MER - bd_banco</figcaption></figure><h2 id="f8609af6-fb39-46e2-a73d-1355bedc8593" class="">1. Codigo para la creación de la base de datos</h2><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7c5c3a45-5797-4dc8-8f5b-cf8a15f16a30" class="code"><code class="language-SQL">-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=&#x27;ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION&#x27;;
+
+-- -----------------------------------------------------
+-- Schema bd_banco
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `bd_banco` DEFAULT CHARACTER SET utf8mb4 ;
+USE `bd_banco` ;
+
+-- -----------------------------------------------------
+-- Table `bd_banco`.`cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_banco`.`cliente` (
+  `idcliente` INT NOT NULL AUTO_INCREMENT,
+  `cedula` VARCHAR(45) NULL,
+  `nombre` VARCHAR(45) NULL,
+  `email` VARCHAR(100) NULL,
+  `telefono` VARCHAR(20) NULL,
+  PRIMARY KEY (`idcliente`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_banco`.`cuenta`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_banco`.`cuenta` (
+  `idcuenta` INT NOT NULL AUTO_INCREMENT,
+  `numero_cuenta` VARCHAR(45) NULL,
+  `saldo` DOUBLE NULL DEFAULT 0,
+  -- `actualizado_el` TIMESTAMP(6) NULL DEFAULT TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `actualizado_el` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `idcliente` INT NOT NULL,
+  PRIMARY KEY (`idcuenta`),
+  CONSTRAINT `fk_Cuenta_cliente1`
+    FOREIGN KEY (`idcliente`)
+    REFERENCES `bd_banco`.`cliente` (`idcliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `bd_banco`.`tipo_transaccion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_banco`.`tipo_transaccion` (
+  `idtipo_transaccion` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  `descripcion` VARCHAR(300) NULL,
+  PRIMARY KEY (`idtipo_transaccion`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `bd_banco`.`transaccion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_banco`.`transaccion` (
+  `idtransaccion` INT NOT NULL AUTO_INCREMENT,
+  `monto` DOUBLE NULL,
+  `creado_el` TIMESTAMP(6) NULL DEFAULT CURRENT_TIMESTAMP,
+  `idcuenta` INT NOT NULL,
+  `idtipo_transaccion` INT NOT NULL,
+  PRIMARY KEY (`idtransaccion`),
+  CONSTRAINT `fk_movimientos_Cuenta`
+    FOREIGN KEY (`idcuenta`)
+    REFERENCES `bd_banco`.`cuenta` (`idcuenta`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaccion_tipo_transaccion1`
+    FOREIGN KEY (`idtipo_transaccion`)
+    REFERENCES `bd_banco`.`tipo_transaccion` (`idtipo_transaccion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;</code></pre><h2 id="08055d4c-76d3-473d-acea-be1f4a7f9980" class="">Diccionario de datos</h2><p id="1d2a8eae-1d20-408e-8c7c-3b9575b82224" class="">La base de datos <strong>bd_banco </strong>tiene las siguientes tablas:</p><ul id="ed4c1296-29e2-470a-808e-39f7ce8be8f5" class="bulleted-list"><li style="list-style-type:disc"><code>cliente</code>: Esta tabla almacena la información de los clientes del banco. Cada cliente tiene un <code>idcliente</code> único, así como campos para <code>cedula</code>, <code>nombre</code>, <code>email</code> y <code>telefono</code>.<table id="5e336d1e-826f-4441-a047-b9b0e5dfb527" class="simple-table"><thead class="simple-table-header"><tr id="a29ff901-1bd3-410a-baa0-614987794cdf"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">Column Name</th><th id="{H=k" class="simple-table-header-color simple-table-header" style="width:107px">DataType </th><th id="IPPB" class="simple-table-header-color simple-table-header" style="width:99px">Data Length</th><th id="Slnb" class="simple-table-header-color simple-table-header" style="width:63px">PK</th><th id="rY]Q" class="simple-table-header-color simple-table-header" style="width:64px">AI</th><th id="dYdA" class="simple-table-header-color simple-table-header" style="width:170px">Coment</th></tr></thead><tbody><tr id="9df3c6d3-c285-4327-ae43-60c219f82f21"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">idcliente</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:99px">11</td><td id="Slnb" class="" style="width:63px">SI</td><td id="rY]Q" class="" style="width:64px">SI</td><td id="dYdA" class="" style="width:170px">NOT NULL AUTOINCREMENT</td></tr><tr id="0387b75a-6153-48d7-9e4a-3dce2de42318"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">cedula</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">45</td><td id="Slnb" class="" style="width:63px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:170px">NULL</td></tr><tr id="ec35c3e0-64c5-4181-8cd6-00749fc0e07d"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">nombre</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">45</td><td id="Slnb" class="" style="width:63px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:170px">NULL</td></tr><tr id="ec89f1a4-6c04-472e-8e96-59f8d8ef44d1"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">email</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">100</td><td id="Slnb" class="" style="width:63px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:170px">NULL</td></tr><tr id="c6c014a1-e6f4-47e1-9edb-ff57f1ae73c8"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:127px">telefono</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">20</td><td id="Slnb" class="" style="width:63px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:170px">NULL</td></tr></tbody></table></li></ul><ul id="f7dd7693-6f57-46a2-acad-fbf8b95d0f08" class="bulleted-list"><li style="list-style-type:disc"><code>cuenta</code>: Esta tabla representa las cuentas bancarias de los clientes. Cada cuenta tiene un <code>idcuenta</code> único, un <code>numero_cuenta</code>, un <code>saldo</code> y un campo <code>actualizado_el</code> que se actualiza automáticamente cada vez que se modifica el registro. Cada cuenta está vinculada a un cliente a través del campo <code>idcliente</code>.<table id="6a41b314-5b21-4a3f-b58a-3c3937581424" class="simple-table"><thead class="simple-table-header"><tr id="5ffecd4e-dd12-4a35-8eca-88841cff6998"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">Column Name</th><th id="{H=k" class="simple-table-header-color simple-table-header" style="width:107px">DataType </th><th id="IPPB" class="simple-table-header-color simple-table-header" style="width:100px">Data Length</th><th id="Slnb" class="simple-table-header-color simple-table-header" style="width:65px">PK</th><th id="rY]Q" class="simple-table-header-color simple-table-header" style="width:64px">AI</th><th id="dYdA" class="simple-table-header-color simple-table-header" style="width:169px">Coment</th></tr></thead><tbody><tr id="85a9e03a-12ac-4628-b5cb-bbbc4787646d"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">idcuenta</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:100px">11</td><td id="Slnb" class="" style="width:65px">SI</td><td id="rY]Q" class="" style="width:64px">SI</td><td id="dYdA" class="" style="width:169px">NOT NULL AUTOINCREMENT</td></tr><tr id="ffd20321-0446-4f34-ac50-0724fbae66e9"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">numero_cuenta</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:100px">45</td><td id="Slnb" class="" style="width:65px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:169px">NULL</td></tr><tr id="acf67d7e-7e4b-40bd-a351-ffe884688af0"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">saldo</th><td id="{H=k" class="" style="width:107px">Double</td><td id="IPPB" class="" style="width:100px"></td><td id="Slnb" class="" style="width:65px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:169px">DEFAULT 0</td></tr><tr id="2d15727f-e790-46a7-8875-00b77e7a9e33"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">actualizado_el</th><td id="{H=k" class="" style="width:107px">TIMESTAMP</td><td id="IPPB" class="" style="width:100px"></td><td id="Slnb" class="" style="width:65px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:169px">DEFAULT ON UPDATE TIMESTAMP</td></tr><tr id="1be503de-a03d-4a7b-bace-fc7b1e65352f"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:139px">idcliente</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:100px">11</td><td id="Slnb" class="" style="width:65px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="" style="width:169px"><code>FK</code> NOT NULL</td></tr></tbody></table></li></ul><ul id="eee999f6-a30a-46e3-9063-caed11e9dd99" class="bulleted-list"><li style="list-style-type:disc"><code>tipo_transaccion</code>: Esta tabla almacena los diferentes tipos de transacciones que pueden ocurrir en una cuenta. Cada tipo de transacción tiene un <code>idtipo_transaccion</code> único, y campos para <code>nombre</code> y <code>descripcion</code>.<table id="124aff9d-a97e-4ead-a81b-75829eeb9d1c" class="simple-table"><thead class="simple-table-header"><tr id="b9e58d75-01d9-4e67-b337-c068d67eef76"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:145px">Column Name</th><th id="{H=k" class="simple-table-header-color simple-table-header" style="width:107px">DataType </th><th id="IPPB" class="simple-table-header-color simple-table-header" style="width:99px">Data Length</th><th id="Slnb" class="simple-table-header-color simple-table-header" style="width:67px">PK</th><th id="rY]Q" class="simple-table-header-color simple-table-header" style="width:64px">AI</th><th id="dYdA" class="simple-table-header-color simple-table-header">Coment</th></tr></thead><tbody><tr id="ff688fd6-715c-4471-b687-d692b20ff239"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:145px">idtipo_transaccion</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:99px">11</td><td id="Slnb" class="" style="width:67px">SI</td><td id="rY]Q" class="" style="width:64px">SI</td><td id="dYdA" class="">NOT NULL AUTOINCREMENT</td></tr><tr id="94bff4d9-5c0d-4b8b-977d-270d07cdd98c"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:145px">nombre</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">45</td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="">NULL</td></tr><tr id="b5796ceb-f2ed-4fff-a898-907447641ba3"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:145px">descripcion</th><td id="{H=k" class="" style="width:107px">Varchar</td><td id="IPPB" class="" style="width:99px">300</td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="">NULL</td></tr></tbody></table></li></ul><ul id="1d578919-5fcd-436a-9d43-40528fd8c29e" class="bulleted-list"><li style="list-style-type:disc"><code>transaccion</code>: Esta tabla registra todas las transacciones que ocurren en las cuentas. Cada transacción tiene un <code>idtransaccion</code> único, un campo <code>monto</code> que indica la cantidad de la transacción, un campo <code>creado_el</code> que registra la fecha y hora de la transacción, y campos <code>idcuenta</code> e <code>idtipo_transaccion</code> que vinculan la transacción a una cuenta y un tipo de transacción respectivamente.<table id="db9ee188-4596-43a2-b05c-da610e08cebb" class="simple-table"><thead class="simple-table-header"><tr id="1404096f-be51-4766-b996-7c26776e462a"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">Column Name</th><th id="{H=k" class="simple-table-header-color simple-table-header" style="width:107px">DataType </th><th id="IPPB" class="simple-table-header-color simple-table-header" style="width:99px">Data Length</th><th id="Slnb" class="simple-table-header-color simple-table-header" style="width:67px">PK</th><th id="rY]Q" class="simple-table-header-color simple-table-header" style="width:64px">AI</th><th id="dYdA" class="simple-table-header-color simple-table-header">Coment</th></tr></thead><tbody><tr id="5e1ae962-62a0-4282-96ab-f1ddafdd559e"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">idtransaccion</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:99px">11</td><td id="Slnb" class="" style="width:67px">SI</td><td id="rY]Q" class="" style="width:64px">SI</td><td id="dYdA" class="">NOT NULL AUTOINCREMENT</td></tr><tr id="c2d97b4f-38b2-46da-ad24-40dc03e5669a"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">monto</th><td id="{H=k" class="" style="width:107px">Double</td><td id="IPPB" class="" style="width:99px"></td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="">NULL</td></tr><tr id="6a251b86-7d7a-40d5-bbca-59bebc843c49"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">creado_el</th><td id="{H=k" class="" style="width:107px">Timestamp</td><td id="IPPB" class="" style="width:99px">6</td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class="">DEFAULT CURRENT_TIMESTAMP</td></tr><tr id="bca686f5-b9fd-4164-9a46-4307a4372068"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">idcuenta</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:99px">11</td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class=""><code>FK</code> NOT NULL</td></tr><tr id="84a6b2bc-3ff8-475d-a58f-f00acaee921f"><th id="e&gt;\i" class="simple-table-header-color simple-table-header" style="width:141px">idtipo_transaccion</th><td id="{H=k" class="" style="width:107px">Int</td><td id="IPPB" class="" style="width:99px">11</td><td id="Slnb" class="" style="width:67px">NO</td><td id="rY]Q" class="" style="width:64px">NO</td><td id="dYdA" class=""><code>FK</code> NOT NULL</td></tr></tbody></table></li></ul><h2 id="1146d32e-5e12-4b4b-a9c1-9b87bb06fb5a" class="">2. Inserciones de datos de prueba</h2><p id="992843cd-df76-4ca0-9295-ccb1fb85610b" class="">Para este punto, es necesario tener un orden en la creación de las cuentas de los clientes, debido a que una cuenta bancaria no debería ser creada sin tener un cliente al cual asignarla. </p><p id="d67a953f-8dca-4c67-83e7-6dffa98a8d6b" class="">La tabla de tipo_transaccion tambien debe estar poblada antes de empezar a registrar transacciones bancarias en la tabla transaccion.</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d17f6d2e-276a-4f3e-a52d-0f6dbf105207" class="code"><code class="language-SQL">- INSERCION DEL CLIENTE
+INSERT INTO cliente 
+(cedula, nombre, email, telefono ) 
+VALUES 
+(&#x27;123&#x27;, &#x27;Davilson&#x27;, &#x27;davilson@gmail.com&#x27;, &#x27;3136329121&#x27;);
+INSERT INTO cliente 
+(cedula, nombre, email, telefono ) 
+VALUES 
+(&#x27;567&#x27;, &#x27;Diego&#x27;, &#x27;diego@gmail.com&#x27;, &#x27;3213445123&#x27;);
+
+-- INSERCIÓN DE LA CUENTA AL USUARIO
+INSERT INTO cuenta 
+(numero_cuenta,idcliente) 
+VALUES 
+(&#x27;987654321011&#x27;,1);
+INSERT INTO cuenta 
+(numero_cuenta,saldo,idcliente) 
+VALUES 
+(&#x27;123456789011&#x27;,500000,2);
+
+-- INSERSION DE LOS TIPOS DE TRANSACCION
+INSERT INTO tipo_transaccion 
+(nombre,descripcion) 
+VALUES
+(&#x27;deposito usuario&#x27;, &#x27;Transaccion del usuario donde deposita dinero a la cuenta&#x27;);
+INSERT INTO tipo_transaccion 
+(nombre,descripcion) 
+VALUES
+(&#x27;retiro usuario&#x27;, &#x27;Transaccion del usuario donde retira dinero de la cuenta&#x27;);
+INSERT INTO tipo_transaccion
+(nombre,descripcion) 
+VALUES
+(&#x27;transferir a usuario&#x27;, &#x27;Transaccion donde un usuario transfiere dinero a otra cuenta&#x27;);
+INSERT INTO tipo_transaccion 
+(nombre,descripcion) 
+VALUES
+(&#x27;transferencia de otro usuario&#x27;, &#x27;Transaccion donde se recibe dinero de otra cuenta&#x27;);</code></pre><p id="3f238a65-2168-4ec5-91e2-777eda2f44d3" class="">Ahora se deben ver las tablas en la base de datos de manera poblada.</p><figure id="59d75787-89be-4e22-85cf-112b0318fefd" class="image" style="text-align:left"><a href="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%201.png"><img style="width:397px" src="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%201.png"/></a><figcaption>Tabla <code>cliente</code></figcaption></figure><figure id="44f7c525-946c-4128-8274-3b81999d0e2e" class="image" style="text-align:left"><a href="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%202.png"><img style="width:413px" src="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%202.png"/></a><figcaption>Tabla <code>cuenta</code></figcaption></figure><figure id="ffd7c0a2-2fe4-43f9-8cfd-8d539cadb86d" class="image" style="text-align:left"><a href="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%203.png"><img style="width:699px" src="Manual%20de%20DBA%2067249b32e06d402cad16780d13c84bbd/Untitled%203.png"/></a><figcaption>Tabla <code>tipo_transaccion</code></figcaption></figure><h2 id="221efd08-2e3f-49f7-b5a6-7ed989fb3678" class="">3. Procedimientos almacenados</h2><p id="3e164313-412b-4df9-a82d-fe94698bc3d5" class="">Se conoce como procedimientos almacenados son conjuntos de instrucciones <code>SQL</code>que son almacenados en las bases de datos y se pueden llamar desde otras consultas cuando sean necesarios. Los procedimientos púeden tomar valores de entrada y devolver múltiples resultados como salida.</p><p id="15512816-f925-446d-820b-297d13043f02" class="">Son muy útiles para realizar operaciones complejas en la base de datos sin necesidad de enviar múltiples consultas desde una aplicación al servidor de la base de datos.</p><p id="d3a97dff-2bb7-4107-a7b1-35d7bacc3950" class=""><code>IN</code>: indica que el parámetro es de solo lectura dentro del procedimiento almacenado.</p><ul id="b234e4ea-dc40-44a3-9d7d-f4a59a9832f1" class="toggle"><li><details open=""><summary>Iteraciones 1 Y 2</summary><p id="e74823f0-bf0e-4d7b-a316-d1d2eb5590c9" class=""><code>Característica:</code> <strong>depositar dinero en una cuenta</strong><br/>Como cliente del banco<br/>quiero depositar dinero en mi cuenta<br/>Para aumentar mi saldo<br/><br/><code>Escenario:</code> <strong>un cliente existente deposita dinero en su cuenta</strong><br/>Dado un cliente existente con identificación “Diego” con $500.000 pesos en su cuenta<br/>Cuando deposita $100.000 pesos en su cuenta<br/>Entonces el saldo de su cuenta es de $600.000 pesos.<br/></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6155ec67-9d53-4953-92fb-2df81fb497bc" class="code"><code class="language-SQL">-- Eliminamos el procedimiento almacenado en caso de que exista
+DROP PROCEDURE IF EXISTS DepositarDinero;
+-- Función para depositar dinero en una cuenta
+DELIMITER //
+CREATE PROCEDURE DepositarDinero(IN cliente_nombre VARCHAR(45), IN monto DOUBLE)
+BEGIN
+	DECLARE cuenta_id INT;
+    IF monto &lt;= 0 THEN
+        SELECT &#x27;El monto a depositar debe ser mayor a cero&#x27; AS mensaje;
+    ELSE
+        -- Obtenemos el id de la cuenta del cliente
+        SELECT idcuenta INTO cuenta_id FROM cuenta WHERE idcliente = (
+            SELECT idcliente FROM cliente WHERE nombre = cliente_nombre
+        ) LIMIT 1;
+
+        -- Insertamos la transacción de depósito a la cuenta
+        INSERT INTO transaccion (`monto`, `idcuenta`, `idtipo_transaccion`)
+        VALUES (monto, cuenta_id, 1);
+
+        -- Actualizamos el saldo de la cuenta
+        UPDATE cuenta SET saldo = saldo + monto WHERE idcuenta = cuenta_id;
+    END IF;
+END //
+DELIMITER ;
+
+-- ---------------------------------------------------------------------------------
+CALL DepositarDinero(&#x27;Diego&#x27;, 100000); -- ITERACIÓN 1
+CALL DepositarDinero(&#x27;Diego&#x27;, -100000); -- ITERACIÓN 2</code></pre></details></li></ul><ul id="b334fafa-550c-4ba9-8045-2be922f7a7d9" class="toggle"><li><details open=""><summary>Iteraciones 3, 4 y5</summary><p id="60ca587d-8cf5-4811-834d-0e850360fcbb" class=""><code>Característica: </code><strong>retirar dinero de una cuenta</strong><br/>Como cliente del banco<br/>quiero retirar dinero de mi cuenta<br/>Para tener efectivo<br/><br/><code>Escenario:</code> <strong>un cliente existente retira dinero de su cuenta</strong><br/>Dado un cliente existente con identificación “Diego” con $100.000 pesos en su cuenta<br/>Cuando retira $10.000 de su cuenta<br/>Entonces el nuevo saldo es de $90.000 pesos.<br/></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c34e440d-0610-440c-9fdb-aff211327424" class="code"><code class="language-SQL">DROP PROCEDURE IF EXISTS RetirarDinero;
+-- Función para retirar dinero de una cuenta 
+DELIMITER //
+CREATE PROCEDURE RetirarDinero(IN cliente_nombre VARCHAR(45), IN monto DOUBLE)
+BEGIN
+    DECLARE cuenta_id INT;
+    DECLARE saldo_actual DOUBLE;
+
+    -- Obtener el id de la cuenta del cliente y su saldo actual
+    SELECT idcuenta, saldo INTO cuenta_id, saldo_actual FROM cuenta WHERE idcliente = (
+        SELECT idcliente FROM cliente WHERE nombre = cliente_nombre
+    ) LIMIT 1;
+        IF monto &lt;= 0 THEN
+        SELECT &#x27;El monto a retirar debe ser mayor a cero&#x27; AS mensaje;
+    ELSE
+		-- Verificar si el saldo es suficiente para el retiro
+		IF saldo_actual &gt;= monto THEN
+			-- Insertar la transacción de retiro
+			INSERT INTO transaccion (`monto`, `idcuenta`, `idtipo_transaccion`)
+			VALUES (monto, cuenta_id, 2);
+
+			-- Actualizar el saldo de la cuenta
+			UPDATE cuenta SET saldo = saldo - monto WHERE idcuenta = cuenta_id;
+		ELSE
+			SELECT &#x27;Saldo insuficiente para realizar el retiro&#x27; AS mensaje;
+		END IF;
+	END IF;
+END //
+DELIMITER ;
+
+-- --------------------------------------------------------------------------------------------------
+-- Actualizamos al saldo del ejemplo
+UPDATE cuenta SET saldo = 100000 WHERE idcliente = 2;
+CALL RetirarDinero(&#x27;Diego&#x27;, 10000);   -- ITERACION 3
+CALL RetirarDinero(&#x27;Diego&#x27;, 200000);  -- ITERACION 4
+CALL RetirarDinero(&#x27;Diego&#x27;, -10000);  -- ITERACION 5</code></pre></details></li></ul><ul id="27870898-8e44-4fed-b003-aaf1c761907e" class="toggle"><li><details open=""><summary>Iteracion 6</summary><ul id="a7225327-8502-4ceb-adea-397270c828fa" class="bulleted-list"><li style="list-style-type:disc"><code>Característica:</code><em><strong> </strong></em><strong>transferir dinero a otra cuenta</strong><br/>Como cliente del banco<br/>quiero trasnferir dinero de mi cuenta a otra cuenta<br/>para pagar mis gastos<br/><br/><code>Escenario ideal:</code> <strong>un cliente existente transfiere dinero de su cuenta a la cuenta de otro cliente</strong><br/>Dado un cliente existente con nombre &quot;Diego&quot; con $500.000 pesos en su cuenta<br/>debe transferirle $400.000 de su cuenta a la cuenta de &quot;Davilson&quot;<br/>Entonces el nuevo saldo es de $100.000 pesos.<br/></li></ul><ul id="8d1ee26f-6978-4f65-b7f8-deea55a2f883" class="bulleted-list"><li style="list-style-type:disc"><code>Escenario f1:</code> <strong><em>c</em></strong><strong>omo cliente del banco quiero intentar transferir mas dinero del que tengo en la cuenta</strong><br/>Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta<br/>Cuando intenta transferirle $600.000 pesos a la cuenta de &quot;Davilson&quot;<br/>Entonces se muestra un mensaje indicando &quot;El monto a transferir debe ser menor o igual al saldo de la cuenta&quot;<br/></li></ul><ul id="2c3025b3-6a82-42ef-a80f-ab2d1c69cc08" class="bulleted-list"><li style="list-style-type:disc"><code>Escenario f2:</code> <strong>como cliente del banco quiero intentar transferir un monto negativo a otra cuenta</strong><br/>Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta<br/>Cuando intenta transferirle $-100000 pesos a la cuenta de &quot;Davilson&quot;<br/>Entonces se muestra un mensaje indicando &quot;El monto a transferir debe ser mayor a 0&quot;<br/></li></ul><ul id="ad4a6e6f-e853-416e-8e9f-0af61dbc5ecd" class="bulleted-list"><li style="list-style-type:disc"><code>Escenario f3:</code> <strong>como cliente del banco quiero intentar transferir a una cuenta que no existe</strong><br/>Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta<br/>Cuando intenta transferirle $100000 pesos a una cuenta que no está registrada<br/>Entonces se muestra un mensaje indicando &quot;La cuenta a transferir no existe&quot;<br/></li></ul><ul id="bc360fde-e2ae-49a1-b77f-0e9873dd22f5" class="bulleted-list"><li style="list-style-type:disc"><code>Escenario f4:</code> <strong>como cliente del banco quiero intentar transferir dinero de mi cuenta a mi cuenta<br/><br/></strong>Dado un cliente existente con nombre “Diego” con $500.000 pesos en su cuenta<br/>Cuando intenta transferirle $500.000 pesos a su misma cuenta<br/>Entonces se muestra un mensaje indicando &quot;No se puede transferir a su misma cuenta&quot;<br/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a23cb7dc-7a1a-479b-b6b2-4b8400b6c740" class="code"><code class="language-SQL">-- Actualizamos la cuenta para el ejemplo
+UPDATE cuenta SET saldo = 500000 WHERE idcliente = 2;
+--  Funcion para transferir y recibir dinero de otras cuentas
+DROP PROCEDURE IF EXISTS TransferirDinero;
+-- Función para transfefir dinero
+DELIMITER //
+CREATE PROCEDURE TransferirDinero(
+    IN cliente_origen VARCHAR(45),
+    IN monto_transferencia DOUBLE,
+    IN cuenta_destino VARCHAR(45)
+)
+BEGIN
+    DECLARE cuenta_id_origen INT;
+    DECLARE saldo_actual_origen DOUBLE;
+    DECLARE cuenta_id_destino INT;
+    DECLARE saldo_actual_destino DOUBLE;
+
+    -- Obtener el id de la cuenta del cliente y su saldo actual
+    SELECT idcuenta, saldo INTO cuenta_id_origen, saldo_actual_origen 
+    FROM cuenta 
+    WHERE idcliente = (
+        SELECT idcliente FROM cliente WHERE nombre = cliente_origen
+    ) LIMIT 1;
+    
+    -- Obtener el id de la cuenta del cliente y su saldo actual
+    SELECT idcuenta, saldo INTO cuenta_id_destino, saldo_actual_destino 
+    FROM cuenta 
+    WHERE idcliente = (
+        SELECT idcliente FROM cliente WHERE nombre = cuenta_destino
+    ) LIMIT 1;
+    
+    -- Escenario f1 
+    IF saldo_actual_origen &lt; monto_transferencia THEN
+        SELECT &#x27;El monto a transferir debe ser menor o igual al saldo de la cuenta&#x27; AS mensaje;
+    -- Escenario f2
+    ELSEIF monto_transferencia &lt;= 0 THEN
+        SELECT &#x27;El monto a depositar debe ser mayor a cero&#x27; AS mensaje;
+    -- Escenario f3
+    ELSEIF cuenta_id_destino IS NULL THEN
+        SELECT &#x27;La cuenta a transferir no existe&#x27; AS mensaje;
+    -- Escenario f4
+    ELSEIF cliente_origen = cuenta_destino THEN
+        SELECT &#x27;No se puede transferir a su misma cuenta&#x27; AS mensaje;
+    ELSE
+        -- Insertamos las transacciones
+        INSERT INTO transaccion (`monto`, `idcuenta`, `idtipo_transaccion`)
+        VALUES (monto_transferencia, cuenta_id_origen, 3);
+        
+        INSERT INTO transaccion (`monto`, `idcuenta`, `idtipo_transaccion`)
+        VALUES (monto_transferencia, cuenta_id_destino, 4);
+        
+        -- Actualizamos el saldo de ambas cuentas
+        UPDATE cuenta SET saldo = saldo - monto_transferencia WHERE idcuenta = cuenta_id_origen;
+        UPDATE cuenta SET saldo = saldo + monto_transferencia WHERE idcuenta = cuenta_id_destino;
+    END IF;
+END //
+
+DELIMITER ;
+
+-- ---------------------------------------------------------------------------------
+CALL TransferirDinero(&#x27;Diego&#x27;, 600000, &#x27;Davilson&#x27;);   -- Escenario f1 
+CALL TransferirDinero(&#x27;Diego&#x27;, -100000, &#x27;Davilson&#x27;);  -- Escenario f2
+CALL TransferirDinero(&#x27;Diego&#x27;, 100000, &#x27;Jennifer&#x27;);   -- Escenario f3
+CALL TransferirDinero(&#x27;Diego&#x27;, 500000, &#x27;diego&#x27;);      -- Escenario f4
+CALL TransferirDinero(&#x27;Diego&#x27;, 400000, &#x27;Davilson&#x27;);   -- Escenario ideal</code></pre></li></ul></details></li></ul><h3 id="3a6ca962-82c4-4700-9b47-0251acd2c36b" class="">Repositorio</h3><figure id="25e03745-8f9c-4d0f-bb72-f896d396081c"><a href="https://github.com/Davilson26/Base_Datos2.git" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">GitHub - Davilson26/Base_Datos2: Esta es una carpeta donde se irá almacenando todos los proyectos vistos en la materia bd2 de la carrera de ing periodo 1-2024</div><div class="bookmark-description">Esta es una carpeta donde se irá almacenando todos los proyectos vistos en la materia bd2 de la carrera de ing periodo 1-2024 - Davilson26/Base_Datos2</div></div><div class="bookmark-href"><img src="https://github.com/fluidicon.png" class="icon bookmark-icon"/>https://github.com/Davilson26/Base_Datos2.git</div></div><img src="https://opengraph.githubassets.com/d9f1478dd8dbc63da74e6aedbc55d3a66ac131c16f909309993df897b56fc4c4/Davilson26/Base_Datos2" class="bookmark-image"/></a></figure><hr id="3fb1ba48-f877-43b1-9f2f-ca228d2855fd"/><h3 id="9e22b39c-aff2-44bd-9cd9-6c27f664a2b1" class="">Datos de contacto</h3><hr id="8acc52e1-8a38-4ef3-88ad-bf7dfdd1c620"/><div id="794e9a93-c8f3-418d-bb89-f3cc2f88bde9" class="column-list"><div id="c519ea6e-100f-4cad-a7d9-52739b073e32" style="width:100%" class="column"><p id="9757b9c1-b280-4721-9d0e-592c3ad66fa5" class=""><code>Author</code> <span class="user">@Davilson Exty Agudelo Murillo</span> </p><p id="de7a9ea3-ac3e-4b56-b5a7-8fa893dcdf8a" class=""><code>Email</code> <mark class="highlight-gray">davilsonexty@gmail.com</mark></p><p id="4c3d1773-4fe7-4f15-b700-ec75fc92553d" class=""><code>Tel</code> <mark class="highlight-gray">3136329121</mark></p></div><div id="e62a8766-4c3a-478b-9f5f-0c9d8f41afd2" style="width:100%" class="column"><p id="5eb5baf2-997e-4595-a24c-8521420bf1e0" class=""><code>Ciudad</code> <mark class="highlight-gray">Cartago, Valle del Cauca</mark></p><p id="035ec1c6-ef64-43ca-9d36-4b1a9f90b46a" class=""><code>Fecha de Creación</code> <mark class="highlight-gray">13 de Marzo de 2024</mark></p><p id="156ff7a4-4264-4f7c-b811-6a962cb18470" class="">
+</p></div></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
